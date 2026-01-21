@@ -12,7 +12,7 @@ using Simulation_End.Context;
 namespace Simulation_End.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260121051026_Addd")]
+    [Migration("20260121081544_Addd")]
     partial class Addd
     {
         /// <inheritdoc />

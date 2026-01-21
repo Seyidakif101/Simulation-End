@@ -41,7 +41,7 @@ namespace Simulation_End.Helper
         {
             foreach(var role in Enum.GetNames(typeof(RoleEnum)))
             {
-                await _roleManager.CreateAsync(new IdentityRole
+                await _roleManager.CreateAsync(new()
                 {
                     Name=role
                 });

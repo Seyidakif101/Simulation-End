@@ -44,7 +44,7 @@ namespace Simulation_End.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Crate(FoodCreateVM vm)
+        public async Task<IActionResult> Create(FoodCreateVM vm)
         {
             await _sendCategoryViewBag();
 
@@ -125,6 +125,11 @@ namespace Simulation_End.Areas.Admin.Controllers
                 return View(vm);
             }
             var existFood = await _context.Foods.FindAsync(vm.Id);
+
+            if (existFood is null)
+                return BadRequest();
+
+
             existFood.Name = vm.Name;
             existFood.Description = vm.Description;
             existFood.Price = vm.Price;
@@ -141,6 +146,20 @@ namespace Simulation_End.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var folder = await _context.Foods.FindAsync(id);
+            if(folder is null)
+            {
+                return NotFound();
+
+            }
+            _context.Foods.Remove(folder);
+            await _context.SaveChangesAsync();
+            string deleteFileName = Path.Combine(_folderPath, folder.ImagePath);
+            FileHelper.FileDelete(deleteFileName);
+            return RedirectToAction(nameof(Index));
+        }
         private async Task _sendCategoryViewBag()
         {
             var categories = await _context.Categories.Select(x => new SelectListItem()
@@ -149,6 +168,7 @@ namespace Simulation_End.Areas.Admin.Controllers
                 Text = x.Name
 
             }).ToListAsync();
+            ViewBag.Categories = categories;
         }
     }
 }
