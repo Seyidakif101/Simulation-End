@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Simulation_End.Context;
+using Simulation_End.Models;
+
 namespace Simulation_End
 {
     public class Program
@@ -7,6 +12,15 @@ namespace Simulation_End
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<AppDbContext>(opt =>
+            {
+                opt.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+            });
+            builder.Services.AddIdentity<AppUser, IdentityRole>(opt =>
+            {
+
+            }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+
 
             var app = builder.Build();
 
